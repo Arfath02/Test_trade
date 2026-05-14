@@ -310,10 +310,7 @@
             <!-- SESSION -->
             <div class="card">
                 <div class="card-title">Session & Instrument</div>
-                <div class="input-group">
-                    <label>API Key</label>
-                    <input type="password" id="apiKey" value="AIzaSyBeTxQ9f41nwp0nyhAvqEiXYhCYgeL5l-I" />
-                </div>
+
                 <div class="input-group">
                     <label>Instrument</label>
                     <input type="text" id="instrument" value="XAUUSD" placeholder="e.g. BTCUSD" />
@@ -431,8 +428,7 @@
         analyzeBtn.addEventListener('click', async () => {
             if (!base64Image) return alert('Please upload a trading chart image');
 
-            const apiKey = document.getElementById('apiKey').value;
-            if (!apiKey) return alert('Please enter an API Key');
+            const apiKey = 'AIzaSyAAK-ES0jKEGle-JyUoWTzqjryrgEND3PM'; // IMPORTANT: This key is leaked and disabled. You MUST generate a new one at aistudio.google.com/app/apikey
 
             analyzeBtn.innerHTML = '<div class="spinner"></div> ANALYZING...';
             analyzeBtn.disabled = true;
@@ -468,17 +464,17 @@ Provide a precise trading signal in JSON format:
                 const text = await response.text();
                 if (!response.ok) {
                     let err;
-                    try { err = JSON.parse(text); } catch(e) { throw new Error(`HTTP ${response.status}: ${text || 'Unknown Error'}`); }
+                    try { err = JSON.parse(text); } catch (e) { throw new Error(`HTTP ${response.status}: ${text || 'Unknown Error'}`); }
                     throw new Error(err.error?.message || `API Error ${response.status}`);
                 }
 
                 if (!text) throw new Error('Empty response from API');
-                
+
                 const data = JSON.parse(text);
                 if (!data.candidates || !data.candidates[0]) {
                     throw new Error('No analysis generated. Try a different image.');
                 }
-                
+
                 const resultText = data.candidates[0].content.parts[0].text;
                 const result = JSON.parse(resultText);
 
